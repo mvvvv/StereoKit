@@ -714,6 +714,23 @@ bool32_t ui_input_at_16(const char16_t* id, char16_t* buffer, int32_t buffer_siz
 
 ///////////////////////////////////////////
 
+int32_t ui_input_caret_get() {
+	return skui_input_target != 0 ? skui_input_caret : -1;
+}
+
+void ui_input_caret_set(int32_t start, int32_t end) {
+	if (skui_input_target == 0) return;
+	skui_input_caret     = maxi(0, start);
+	skui_input_caret_end = maxi(skui_input_caret, end);
+	skui_input_blink     = time_totalf_unscaled();
+}
+
+bool32_t ui_input_is_focused(const char* id) {
+	return skui_input_target != 0 && skui_input_target == ui_stack_hash(id);
+}
+
+///////////////////////////////////////////
+
 void ui_progress_bar_at_ex(float percent, vec3 start_pos, vec2 size, float focus, ui_dir_ bar_direction, bool flip_fill_dir) {
 	// For a vertical progress bar, the easiest thing is to just rotate the
 	// hierarchy 90, as this simplifies any issues with trying to rotate the
